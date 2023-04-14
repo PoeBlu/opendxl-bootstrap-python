@@ -35,7 +35,9 @@ class Client(object):
     @response_timeout.setter
     def response_timeout(self, response_timeout):
         if response_timeout < self._MIN_RESPONSE_TIMEOUT:
-            raise Exception("Response timeout must be greater than or equal to " + str(self._MIN_RESPONSE_TIMEOUT))
+            raise Exception(
+                f"Response timeout must be greater than or equal to {str(self._MIN_RESPONSE_TIMEOUT)}"
+            )
         self._response_timeout = response_timeout
 
     def _dxl_sync_request(self, request):
@@ -52,4 +54,4 @@ class Client(object):
         if res.message_type != Message.MESSAGE_TYPE_ERROR:
             return res
         else:
-            raise Exception("Error: " + res.error_message + " (" + str(res.error_code) + ")")
+            raise Exception(f"Error: {res.error_message} ({str(res.error_code)})")

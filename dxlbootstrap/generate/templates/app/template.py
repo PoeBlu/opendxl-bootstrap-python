@@ -305,11 +305,17 @@ class AppTemplate(Template):
         config_dir.add_child(file_comp)
         file_comp = FileTemplateComponent("dxlclient.config.dist", "config/dxlclient.config.tmpl")
         config_dir.add_child(file_comp)
-        file_comp = FileTemplateComponent(app_section.name + ".config", "config/app.config.tmpl",
-                                          {"fullName": app_section.full_name})
+        file_comp = FileTemplateComponent(
+            f"{app_section.name}.config",
+            "config/app.config.tmpl",
+            {"fullName": app_section.full_name},
+        )
         config_dir.add_child(file_comp)
-        file_comp = FileTemplateComponent(app_section.name + ".config.dist", "config/app.config.tmpl",
-                                          {"fullName": app_section.full_name})
+        file_comp = FileTemplateComponent(
+            f"{app_section.name}.config.dist",
+            "config/app.config.tmpl",
+            {"fullName": app_section.full_name},
+        )
         config_dir.add_child(file_comp)
 
     @staticmethod
@@ -465,20 +471,20 @@ class AppTemplate(Template):
         config = context.template.template_config
         app_section = config.application_section
 
-        basic_sample_comp = components_dict["basic_sample_comp"]
-        app_file_comp = components_dict["app_file_comp"]
-        app_dir = components_dict["app_dir"]
-
         event_handlers = app_section.event_handlers
         if len(event_handlers) > 0:
             components_dict["has_events"] = True
             register_event_handler_def_comp = CodeTemplateComponent("app/code/register_event_handler_def.code.tmpl")
             register_event_handler_def_comp.indent_level = 1
+            app_file_comp = components_dict["app_file_comp"]
             app_file_comp.add_child(register_event_handler_def_comp)
 
             file_comp = FileTemplateComponent("eventhandlers.py", "app/eventhandlers.py.tmpl")
+            app_dir = components_dict["app_dir"]
+
             app_dir.add_child(file_comp)
 
+            basic_sample_comp = components_dict["basic_sample_comp"]
             for handler_name in event_handlers:
                 handler_section = config.get_event_handler_section(handler_name)
                 code_comp = CodeTemplateComponent("app/code/events_event_callback.code.tmpl",
@@ -512,17 +518,17 @@ class AppTemplate(Template):
         config = context.template.template_config
         app_section = config.application_section
 
-        basic_sample_comp = components_dict["basic_sample_comp"]
-        app_file_comp = components_dict["app_file_comp"]
-        app_dir = components_dict["app_dir"]
-
         service_names = app_section.services
         requests_file_comp = None
         if len(service_names) > 0:
             components_dict["has_services"] = True
             register_services_def_comp = CodeTemplateComponent("app/code/register_services_def.code.tmpl")
             register_services_def_comp.indent_level = 1
+            app_file_comp = components_dict["app_file_comp"]
             app_file_comp.add_child(register_services_def_comp)
+
+            basic_sample_comp = components_dict["basic_sample_comp"]
+            app_dir = components_dict["app_dir"]
 
             for service_name in service_names:
                 service = config.get_service_section(service_name)

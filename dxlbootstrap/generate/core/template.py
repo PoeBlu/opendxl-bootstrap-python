@@ -91,9 +91,7 @@ class TemplateContext(object):
         :param lines: The lines to write to the file
         """
         for line in lines:
-            indent = ""
-            for i in range(0, self._indent_level):
-                indent += "    "
+            indent = "".join("    " for _ in range(self._indent_level))
             self._file.write(indent + line + "\n")
 
 
@@ -304,10 +302,7 @@ class Template(object):
         for line in resource.splitlines():
             for key, value in replace_dict.iteritems():
                 key = "\$\{" + key + "\}"
-                if callable(value):
-                    value = value()
-                else:
-                    value = str(value)
+                value = value() if callable(value) else str(value)
                 line = re.sub(key, value, line)
             ret_lines.append(line)
 
@@ -324,10 +319,7 @@ class Template(object):
         :param char: The character to use
         :return: An underline
         """
-        ret = ""
-        for x in range(0, length):
-            ret += char
-        return ret
+        return "".join(char for _ in range(length))
 
     @staticmethod
     def create_install_requires(requires_list):
